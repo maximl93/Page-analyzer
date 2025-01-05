@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     checkstyle
     jacoco
+    application
     id("java")
     id("io.freefair.lombok") version "8.6"
     id("com.github.ben-manes.versions") version "0.51.0"
@@ -17,7 +18,16 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = "hexlet.code.App"
+}
+
 dependencies {
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("io.javalin:javalin:6.1.3")
+    implementation("io.javalin:javalin-bundle:6.1.3")
+    implementation("io.javalin:javalin-rendering:6.1.3")
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
