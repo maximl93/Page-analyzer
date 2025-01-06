@@ -45,9 +45,3 @@ tasks.test {
 }
 
 tasks.jacocoTestReport { reports { xml.required.set(true) } }
-
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "hexlet.code.App"
-    }
-}
