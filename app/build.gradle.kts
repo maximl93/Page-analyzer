@@ -23,6 +23,7 @@ application {
 }
 
 dependencies {
+    implementation("org.postgresql:postgresql:42.7.4")
     implementation("com.h2database:h2:2.2.224")
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
@@ -32,7 +33,6 @@ dependencies {
     implementation("io.javalin:javalin:6.1.3")
     implementation("io.javalin:javalin-bundle:6.1.3")
     implementation("io.javalin:javalin-rendering:6.1.3")
-    implementation("org.postgresql:postgresql:42.5.1")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
