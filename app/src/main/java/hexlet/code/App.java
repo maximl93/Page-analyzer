@@ -34,12 +34,12 @@ public class App {
         return jdbcUrl;
     }
 
-    private static String readResourceFile(String fileName) throws IOException {
-        InputStream inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.joining("\n"));
-        }
-    }
+    //private static String readResourceFile(String fileName) throws IOException {
+    //    InputStream inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
+    //    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+    //        return reader.lines().collect(Collectors.joining("\n"));
+    //    }
+    //}
 
     public static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
@@ -54,11 +54,11 @@ public class App {
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-        String sql = readResourceFile("schema.sql");
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        }
+        //String sql = readResourceFile("schema.sql");
+        //try (Connection connection = dataSource.getConnection();
+        //     Statement statement = connection.createStatement()) {
+        //    statement.execute(sql);
+        //}
 
         BaseRepository.dataSource = dataSource;
 
