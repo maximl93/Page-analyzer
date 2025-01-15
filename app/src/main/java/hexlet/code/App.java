@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.UrlsController;
 import hexlet.code.repository.BaseRepository;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +36,12 @@ public class App {
         return jdbcUrl;
     }
 
-    //private static String readResourceFile(String fileName) throws IOException {
-    //    InputStream inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
-    //    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-    //        return reader.lines().collect(Collectors.joining("\n"));
-    //    }
-    //}
+    private static String readResourceFile(String fileName) throws IOException {
+        InputStream inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        }
+    }
 
     public static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
@@ -54,11 +56,11 @@ public class App {
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-        //String sql = readResourceFile("schema.sql");
-        //try (Connection connection = dataSource.getConnection();
-        //     Statement statement = connection.createStatement()) {
-        //    statement.execute(sql);
-        //}
+        String sql = readResourceFile("schema.sql");
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        }
 
         BaseRepository.dataSource = dataSource;
 
@@ -67,7 +69,10 @@ public class App {
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
 
-        app.get("/", context -> context.render("index.jte"));
+        app.get(NamedRoutes.mainPage(), UrlsController::index);
+        app.post(NamedRoutes.allUrlsPage(), UrlsController::saveUrlInDB);
+        app.get(NamedRoutes.allUrlsPage(), UrlsController::showAllSavedUrls);
+        app.get(NamedRoutes.urlPage("{id}"), UrlsController::showSavedUrl);
 
         return app;
     }
