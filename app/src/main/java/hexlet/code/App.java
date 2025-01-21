@@ -56,10 +56,12 @@ public class App {
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-        String sql = readResourceFile("schema.sql");
-        try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
+        if (getJdbcUrl().contains("jdbc:h2")) {
+            String sql = readResourceFile("schema.sql");
+            try (Connection connection = dataSource.getConnection();
+                 Statement statement = connection.createStatement()) {
+                statement.execute(sql);
+            }
         }
 
         BaseRepository.dataSource = dataSource;
