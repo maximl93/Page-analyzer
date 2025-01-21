@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Collectors;
@@ -56,12 +55,16 @@ public class App {
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
+        String sql;
         if (getJdbcUrl().contains("jdbc:h2")) {
-            String sql = readResourceFile("schema.sql");
-            try (Connection connection = dataSource.getConnection();
-                 Statement statement = connection.createStatement()) {
-                statement.execute(sql);
-            }
+            sql = readResourceFile("schemaH2.sql");
+        } else {
+            sql = readResourceFile("schemaPostgres.sql");
+        }
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute(sql);
         }
 
         BaseRepository.dataSource = dataSource;
