@@ -54,13 +54,7 @@ public class App {
         hikariConfig.setJdbcUrl(getJdbcUrl());
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
-
-        String sql;
-        if (getJdbcUrl().contains("jdbc:h2")) {
-            sql = readResourceFile("schemaH2.sql");
-        } else {
-            sql = readResourceFile("schemaPostgres.sql");
-        }
+        String sql = readResourceFile("schema.sql");
 
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
@@ -78,6 +72,7 @@ public class App {
         app.post(NamedRoutes.allUrlsPage(), UrlsController::saveUrlInDB);
         app.get(NamedRoutes.allUrlsPage(), UrlsController::showAllSavedUrls);
         app.get(NamedRoutes.urlPage("{id}"), UrlsController::showSavedUrl);
+        app.post(NamedRoutes.urlCheck("{id}"), UrlsController::checkSavedUrl);
 
         return app;
     }
