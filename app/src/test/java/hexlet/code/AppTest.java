@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AppTest {
+public final class AppTest {
     private Javalin app;
     private final String testedUrl = "url=https://www.example.com";
     public static MockWebServer mockServer;
