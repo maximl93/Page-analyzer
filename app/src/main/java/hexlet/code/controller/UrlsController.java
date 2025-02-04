@@ -26,7 +26,7 @@ public class UrlsController {
         context.render("index.jte", model("page", page));
     }
 
-    public static void saveUrlInDB(Context context) {
+    public static void save(Context context) {
         String checkedUrl = context.formParam("url");
         try {
             URL url = URI.create(checkedUrl).toURL();
@@ -48,14 +48,14 @@ public class UrlsController {
         }
     }
 
-    public static void showAllSavedUrls(Context context) throws SQLException {
-        Map<Url, UrlCheck> urlsAndChecks = UrlsRepository.getAllUrlsAndLastUrlsChecks();
+    public static void showAll(Context context) throws SQLException {
+        Map<Url, UrlCheck> urlsAndChecks = UrlsRepository.findAllUrlsAndLastUrlsChecks();
         UrlsPage page = new UrlsPage(urlsAndChecks);
         consumeFlashMessages(context, page);
         context.render("showAll.jte", model("page", page));
     }
 
-    public static void showSavedUrl(Context context) throws SQLException {
+    public static void findById(Context context) throws SQLException {
         Long id = context.pathParamAsClass("id", Long.class).get();
         UrlPage page = new UrlPage(UrlsRepository.findById(id).get(),
                 ChecksRepository.findByUrlId(id));
@@ -63,7 +63,7 @@ public class UrlsController {
         context.render("showOne.jte", model("page", page));
     }
 
-    public static void checkSavedUrl(Context context) throws SQLException {
+    public static void check(Context context) throws SQLException {
         Long urlId = context.pathParamAsClass("id", Long.class).get();
         Url savedUrl = UrlsRepository.findById(urlId).get();
         String urlName = savedUrl.getName();

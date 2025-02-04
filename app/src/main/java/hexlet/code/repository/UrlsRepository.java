@@ -44,17 +44,6 @@ public class UrlsRepository extends BaseRepository {
         }
     }
 
-    private static Url savedUrl(ResultSet resultSet) throws SQLException {
-        Url url = new Url(resultSet.getString("name"));
-        url.setId(resultSet.getLong("id"));
-        if (resultSet.getTimestamp("created_at") == null) {
-            url.setCreatedAt(null);
-        } else {
-            url.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
-        }
-        return url;
-    }
-
     public static Optional<Url> findByName(String urlName) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME);
@@ -79,23 +68,38 @@ public class UrlsRepository extends BaseRepository {
         }
     }
 
-    public static Map<Url, UrlCheck> getAllUrlsAndLastUrlsChecks() throws SQLException {
+    public static Map<Url, UrlCheck> findAllUrlsAndLastUrlsChecks() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_URLS_AND_CHECKS);
             ResultSet resultSet = preparedStatement.executeQuery();
             Map<Url, UrlCheck> result = new LinkedHashMap<>();
             while (resultSet.next()) {
-                Url savedUrl = new Url(resultSet.getString("name"));
-                savedUrl.setId(resultSet.getLong("id"));
-                UrlCheck lastUrlCheck = new UrlCheck(resultSet.getInt("status_code"), resultSet.getLong("id"));
-                if (resultSet.getTimestamp("created_at") == null) {
-                    lastUrlCheck.setCreatedAt(null);
-                } else {
-                    lastUrlCheck.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
-                }
-                result.put(savedUrl, lastUrlCheck);
+                savedUrlsAndChecks(result, resultSet);
             }
             return result;
         }
+    }
+
+    private static Url savedUrl(ResultSet resultSet) throws SQLException {
+        Url url = new Url(resultSet.getString("name"));
+        url.setId(resultSet.getLong("id"));
+        if (resultSet.getTimestamp("created_at") == null) {
+            url.setCreatedAt(null);
+        } else {
+            url.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+        }
+        return url;
+    }
+
+    private static void savedUrlsAndChecks(Map<Url, UrlCheck> result, ResultSet resultSet) throws SQLException {
+        Url savedUrl = new Url(resultSet.getString("name"));
+        savedUrl.setId(resultSet.getLong("id"));
+        UrlCheck lastUrlCheck = new UrlCheck(resultSet.getInt("status_code"), resultSet.getLong("id"));
+        if (resultSet.getTimestamp("created_at") == null) {
+            lastUrlCheck.setCreatedAt(null);
+        } else {
+            lastUrlCheck.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+        }
+        result.put(savedUrl, lastUrlCheck);
     }
 }

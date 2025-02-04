@@ -69,10 +69,10 @@ public class App {
         });
 
         app.get(NamedRoutes.mainPage(), UrlsController::index);
-        app.post(NamedRoutes.allUrlsPage(), UrlsController::saveUrlInDB);
-        app.get(NamedRoutes.allUrlsPage(), UrlsController::showAllSavedUrls);
-        app.get(NamedRoutes.urlPage("{id}"), UrlsController::showSavedUrl);
-        app.post(NamedRoutes.urlCheck("{id}"), UrlsController::checkSavedUrl);
+        app.post(NamedRoutes.allUrlsPage(), UrlsController::save);
+        app.get(NamedRoutes.allUrlsPage(), UrlsController::showAll);
+        app.get(NamedRoutes.urlPage("{id}"), UrlsController::findById);
+        app.post(NamedRoutes.urlCheck("{id}"), UrlsController::check);
 
         return app;
     }

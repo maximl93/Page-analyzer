@@ -39,20 +39,6 @@ public class ChecksRepository extends BaseRepository {
         }
     }
 
-    private static UrlCheck savedCheck(ResultSet resultSet) throws SQLException {
-        UrlCheck check = new UrlCheck(resultSet.getInt("status_code"), resultSet.getLong("url_id"));
-        check.setId(resultSet.getLong("id"));
-        check.setH1(resultSet.getString("h1"));
-        check.setTitle(resultSet.getString("title"));
-        check.setDescription(resultSet.getString("description"));
-        if (resultSet.getTimestamp("created_at") == null) {
-            check.setCreatedAt(null);
-        } else {
-            check.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
-        }
-        return check;
-    }
-
     public static List<UrlCheck> findByUrlId(long urlId) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_URL_CHECKS);
@@ -64,5 +50,19 @@ public class ChecksRepository extends BaseRepository {
             }
             return allUrlChecks;
         }
+    }
+
+    public static UrlCheck savedCheck(ResultSet resultSet) throws SQLException {
+        UrlCheck check = new UrlCheck(resultSet.getInt("status_code"), resultSet.getLong("url_id"));
+        check.setId(resultSet.getLong("id"));
+        check.setH1(resultSet.getString("h1"));
+        check.setTitle(resultSet.getString("title"));
+        check.setDescription(resultSet.getString("description"));
+        if (resultSet.getTimestamp("created_at") == null) {
+            check.setCreatedAt(null);
+        } else {
+            check.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+        }
+        return check;
     }
 }
