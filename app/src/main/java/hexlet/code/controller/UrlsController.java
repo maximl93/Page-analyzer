@@ -6,6 +6,7 @@ import hexlet.code.dto.UrlsPage;
 import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlsRepository;
+import hexlet.code.repository.ChecksRepository;
 import hexlet.code.util.NamedRoutes;
 import hexlet.code.util.Utils;
 import io.javalin.http.Context;
@@ -30,7 +31,7 @@ public class UrlsController {
         try {
             URL url = URI.create(checkedUrl).toURL();
             String buildUrl = buildUrl(url);
-            if (UrlsRepository.findSavedUrlByName(buildUrl).isEmpty()) {
+            if (UrlsRepository.findByName(buildUrl).isEmpty()) {
                 Url savingUrl = new Url(buildUrl);
                 UrlsRepository.save(savingUrl);
                 setFlashMessages(context, "Страница успешно добавлена", "success");
@@ -56,18 +57,18 @@ public class UrlsController {
 
     public static void showSavedUrl(Context context) throws SQLException {
         Long id = context.pathParamAsClass("id", Long.class).get();
-        UrlPage page = new UrlPage(UrlsRepository.findSavedUrlById(id).get(),
-                UrlsRepository.getAllUrlChecks(id));
+        UrlPage page = new UrlPage(UrlsRepository.findById(id).get(),
+                ChecksRepository.findByUrlId(id));
         consumeFlashMessages(context, page);
         context.render("showOne.jte", model("page", page));
     }
 
     public static void checkSavedUrl(Context context) throws SQLException {
         Long urlId = context.pathParamAsClass("id", Long.class).get();
-        Url savedUrl = UrlsRepository.findSavedUrlById(urlId).get();
+        Url savedUrl = UrlsRepository.findById(urlId).get();
         String urlName = savedUrl.getName();
         UrlCheck newCheck = Utils.getResponseBodyContext(urlName, urlId);
-        UrlsRepository.saveUrlCheck(newCheck);
+        ChecksRepository.save(newCheck);
         setFlashMessages(context, "Страница успешно проверена", "success");
         context.redirect(NamedRoutes.urlPage(urlId));
     }

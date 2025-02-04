@@ -10,7 +10,7 @@
     @if(page.getUrlsAndChecks().keySet().isEmpty())
         <h2>Нет сохраненных ссылок</h2>
     @else
-        <table class="table">
+        <table class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -19,10 +19,10 @@
                 <th scope="col">Код ответа</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             @for(Url url : page.getUrlsAndChecks().keySet())
                 <tr>
-                    <td>${url.getId()}</td>
+                    <th scope="row">${url.getId()}</th>
                     <td><a href="${NamedRoutes.urlPage(url.getId())}">${url.getName()}</a></td>
                     <td>@if(page.getUrlsAndChecks().get(url).getCreatedAt() != null)
                             ${Utils.formatDate(page.getUrlsAndChecks().get(url).getCreatedAt())}

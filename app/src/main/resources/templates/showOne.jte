@@ -8,7 +8,7 @@
     page = page,
     content = @`
 
-        <table class="table">
+        <table class="table table-bordered">
             <tr>
                 <th>ID</th>
                 <td>${page.getUrl().getId()}</td>
@@ -32,18 +32,18 @@
     @if(page.getChecks().isEmpty())
         <h2>Ссылка не проверялась</h2>
     @else
-        <table class="table">
+        <table class="table table-hover table-bordered mt-3">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Код ответа</th>
-                <th>title</th>
-                <th>h1</th>
-                <th>description</th>
-                <th>Дата проверки</th>
+                <th scope="row">ID</th>
+                <th scope="row">Код ответа</th>
+                <th scope="row">title</th>
+                <th scope="row">h1</th>
+                <th scope="row">description</th>
+                <th scope="row">Дата проверки</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             @for(UrlCheck check : page.getChecks())
                 <tr>
                     <td>${check.getId()}</td>

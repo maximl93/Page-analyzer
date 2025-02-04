@@ -61,16 +61,6 @@ public final class AppTest {
         });
     }
 
-    //@Test
-    //public void urlAlreadySavedTest() {
-    //    JavalinTest.test(app, (server, client) -> {
-    //        client.post(NamedRoutes.allUrlsPage(), testedUrl);
-    //        var response = client.post(NamedRoutes.allUrlsPage(), testedUrl);
-    //        assertThat(response.code()).isEqualTo(200);
-    //        assertThat(response.body().string()).contains("Страница уже существует");
-    //    });
-    //}
-
     @Test
     public void showSavedUrlsPageTest() {
         JavalinTest.test(app, (server, client) -> {

@@ -39,14 +39,14 @@
 
 
     <main class="flex-grow-1">
-        <div class="container-fluid p-5">
+        <div class="p-5">
             @if(page != null && page.getFlashMessage() != null)
                 <div class="alert alert-${page.getMessageType()} alert-dismissible fade show" role="alert">
                     <strong>${page.getFlashMessage()}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div>
+            <div class="container-md">
                 ${content}
             </div>
         </div>
